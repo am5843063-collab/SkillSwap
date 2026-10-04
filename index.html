@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkillSwap — Trade what you know</title>
+
+  <meta name="theme-color" content="#0F172A" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css?v=3.0" />
+</head>
+<body>
+
+  <!-- ============================================
+       TOP NAVIGATION BAR
+  ============================================= -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <span class="logo">Skill<span class="logo-accent">Swap</span></span>
+    </div>
+
+    <button class="hamburger" id="hamburgerBtn" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="nav-links" id="navLinks">
+      <button class="nav-link active" data-page="home">Home</button>
+      <button class="nav-link" data-page="browse">Browse Skills</button>
+      <button class="nav-link" data-page="requests">Requests</button>
+      <button class="nav-link" data-page="chat">Chat</button>
+      <button class="nav-link" data-page="dashboard">My Dashboard</button>
+
+      <!-- Shown when NOT logged in -->
+      <button class="nav-btn-primary" id="navLoginBtn" data-page="login">Log In</button>
+
+      <!-- Shown when logged in (hidden by default) -->
+      <button class="nav-link hidden" id="navLogoutBtn">Log Out</button>
+    </div>
+  </nav>
+
+  <!-- ============================================
+       PAGE: HOME / LANDING PAGE
+  ============================================= -->
+  <section class="page active" id="page-home">
+    <header class="hero">
+      <div class="hero-text">
+        <p class="hero-kicker">No money. Just knowledge.</p>
+        <h1 class="hero-title">You teach a skill.<br>You learn a skill.<br><em>Everybody wins.</em></h1>
+        <p class="hero-sub">SkillSwap connects people who want to trade knowledge directly —
+          guitar for graphic design, Spanish for Excel, yoga for coding. Find someone,
+          send a request, hop on a video call, and start swapping.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary btn-large" data-page="signup">Create your profile</button>
+          <button class="btn btn-ghost btn-large" data-page="browse">Browse skills →</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><strong id="statUsers">0</strong><span>members</span></div>
+          <div class="stat"><strong id="statSkills">0</strong><span>skills listed</span></div>
+          <div class="stat"><strong id="statHours">0</strong><span>hours swapped</span></div>
+        </div>
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <div class="swap-card swap-card-teach">
+          <span class="swap-label">TEACHING</span>
+          <span class="swap-skill">🎸 Guitar</span>
+          <span class="swap-name">— Meera</span>
+        </div>
+        <div class="swap-arrow">⇄</div>
+        <div class="swap-card swap-card-learn">
+          <span class="swap-label">LEARNING</span>
+          <span class="swap-skill">🎨 Illustration</span>
+          <span class="swap-name">— from Dev</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="how-it-works">
+      <h2>How the swap works</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <h3>Build your profile</h3>
+          <p>List the skills you can teach and the skills you want to learn. Takes two minutes.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <h3>Find your match</h3>
+          <p>Browse people teaching what you want to learn — check their ratings and hours taught.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <h3>Send a request</h3>
+          <p>Propose a swap. They accept, and you're connected — no payment, ever.</p>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <h3>Video call & learn</h3>
+          <p>Jump on a real, live video call, teach and learn face-to-face, and log your hours.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="featured-skills">
+      <h2>Popular right now</h2>
+      <div class="tag-cloud" id="popularTags"></div>
+    </section>
+  </section>
+
+
+  <!-- ============================================
+       PAGE: SIGN UP (create account + profile)
+  ============================================= -->
+  <section class="page" id="page-signup">
+    <div class="form-page">
+      <div class="form-card">
+        <h2>Create your profile</h2>
+        <p class="form-sub">Sign up with an email and password, then tell us what you'd like to trade.</p>
+
+        <form id="signupForm">
+          <div class="form-row">
+            <label for="suEmail">Email Address</label>
+            <div class="input-with-feedback">
+              <input type="email" id="suEmail" placeholder="you@example.com" required autocomplete="email" />
+              <span class="input-status-icon" id="suEmailStatusIcon" aria-hidden="true"></span>
+            </div>
+            <div class="email-validation-feedback" id="suEmailFeedback"></div>
+          </div>
+          <div class="form-row">
+            <label for="suPassword">Password</label>
+            <input type="password" id="suPassword" placeholder="At least 6 characters" minlength="6" required />
+          </div>
+          <div class="form-row">
+            <label for="regName">Your name</label>
+            <input type="text" id="regName" placeholder="e.g. Aditi Sharma" required />
+          </div>
+
+          <div class="form-row">
+            <label for="regAvatar">Pick an avatar emoji</label>
+            <div class="avatar-picker" id="avatarPicker"></div>
+            <input type="hidden" id="regAvatar" value="🙂" />
+          </div>
+
+          <div class="form-row">
+            <label for="regBio">Short bio</label>
+            <textarea id="regBio" placeholder="A line or two about you..." rows="2"></textarea>
+          </div>
+
+          <div class="split-row">
+            <div class="form-row half">
+              <label for="regTeach">Skill you can TEACH</label>
+              <input type="text" id="regTeach" placeholder="e.g. Photography" required />
+            </div>
+            <div class="form-row half">
+              <label for="regLearn">Skill you want to LEARN</label>
+              <input type="text" id="regLearn" placeholder="e.g. French" required />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-large btn-full">Create my profile →</button>
+        </form>
+
+        <p class="form-note" id="signupNote"></p>
+        <p class="form-switch">Already have an account? <button class="link-btn" data-page="login">Log in</button></p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       PAGE: LOG IN
+  ============================================= -->
+  <section class="page" id="page-login">
+    <div class="form-page">
+      <div class="form-card">
+        <h2>Welcome back</h2>
+        <p class="form-sub">Log in to see your requests, dashboard, and swaps.</p>
+
+        <form id="loginForm">
+          <div class="form-row">
+            <label for="liEmail">Email Address</label>
+            <div class="input-with-feedback">
+              <input type="email" id="liEmail" placeholder="you@example.com" required autocomplete="email" />
+              <span class="input-status-icon" id="liEmailStatusIcon" aria-hidden="true"></span>
+            </div>
+            <div class="email-validation-feedback" id="liEmailFeedback"></div>
+          </div>
+          <div class="form-row">
+            <label for="liPassword">Password</label>
+            <input type="password" id="liPassword" placeholder="Your password" required />
+          </div>
+          <button type="submit" class="btn btn-primary btn-large btn-full">Log in →</button>
+        </form>
+
+        <p class="form-note" id="loginNote"></p>
+        <p class="form-switch">New here? <button class="link-btn" data-page="signup">Create a profile</button></p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       PAGE: BROWSE SKILLS
+  ============================================= -->
+  <section class="page" id="page-browse">
+    <div class="page-header">
+      <h2>Browse people & skills</h2>
+      <p>Find someone teaching what you want to learn.</p>
+    </div>
+
+    <div class="browse-toolbar">
+      <input type="text" id="searchInput" placeholder="Search a skill, e.g. 'painting'..." class="search-input" />
+      <select id="filterSelect" class="filter-select">
+        <option value="all">All categories</option>
+        <option value="music">Music</option>
+        <option value="tech">Tech & Coding</option>
+        <option value="art">Art & Design</option>
+        <option value="language">Languages</option>
+        <option value="fitness">Fitness & Wellness</option>
+        <option value="cooking">Cooking</option>
+        <option value="business">Business</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+
+    <div class="people-grid" id="peopleGrid">
+      <div class="empty-state"><span>⏳</span>Loading people...</div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       PAGE: SWAP REQUESTS
+  ============================================= -->
+  <section class="page" id="page-requests">
+    <div class="page-header">
+      <h2>Your swap requests</h2>
+      <p>Manage incoming and outgoing requests to teach and learn.</p>
+    </div>
+
+    <div class="requests-tabs">
+      <button class="tab-btn active" data-tab="incoming">Incoming <span id="incomingCount" class="tab-count">0</span></button>
+      <button class="tab-btn" data-tab="outgoing">Sent by me <span id="outgoingCount" class="tab-count">0</span></button>
+      <button class="tab-btn" data-tab="accepted">Active swaps <span id="acceptedCount" class="tab-count">0</span></button>
+    </div>
+
+    <div class="requests-list" id="incomingList"></div>
+    <div class="requests-list hidden" id="outgoingList"></div>
+    <div class="requests-list hidden" id="acceptedList"></div>
+  </section>
+
+
+  <!-- ============================================
+       PAGE: CHAT / DIRECT MESSAGES
+  ============================================= -->
+  <section class="page" id="page-chat">
+    <div class="page-header">
+      <h2>Direct Messages</h2>
+      <p>Chat with your swap partners in real-time, see who is online, and coordinate sessions.</p>
+    </div>
+
+    <div class="chat-container">
+      <!-- Contacts sidebar -->
+      <div class="chat-sidebar" id="chatSidebar">
+        <div class="chat-sidebar-header">
+          <h3>Conversations</h3>
+          <input type="text" id="chatSearchInput" placeholder="Search contacts..." class="chat-search-input" />
+        </div>
+        <div class="chat-conversations-list" id="chatConversationsList">
+          <div class="empty-state"><span>💬</span>Loading conversations...</div>
+        </div>
+      </div>
+
+      <!-- Main chat pane -->
+      <div class="chat-main" id="chatMain">
+        <div class="chat-empty-state" id="chatNoActive">
+          <span>💬</span>
+          <h3>Select a conversation</h3>
+          <p>Choose someone from the left or click "Chat" on your active swaps!</p>
+        </div>
+
+        <div class="chat-window-inner hidden" id="chatActiveWindow" style="display:flex; flex-direction:column; height:100%;">
+          <div class="chat-header">
+            <div class="chat-header-user">
+              <button class="btn btn-ghost btn-small hidden" id="chatBackBtn" style="padding:0.3rem 0.6rem; margin-right:0.2rem;">←</button>
+              <div class="chat-header-avatar" id="chatPartnerAvatar">🙂</div>
+              <div class="chat-header-details">
+                <h4 id="chatPartnerName">Partner Name</h4>
+                <div id="chatPartnerPresence" class="online-badge offline"><span class="status-dot offline"></span>Offline</div>
+              </div>
+            </div>
+            <div class="chat-header-actions">
+              <button class="btn btn-primary btn-small" id="chatStartCallBtn">📹 Start Call</button>
+            </div>
+          </div>
+
+          <div class="chat-messages" id="chatMessagesContainer">
+            <!-- Message bubbles rendered here -->
+          </div>
+
+          <form class="chat-input-container" id="chatForm">
+            <input type="text" class="chat-input" id="chatMessageInput" placeholder="Type a message..." autocomplete="off" />
+            <button type="submit" class="chat-send-btn" id="chatSendBtn" title="Send message">➤</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       PAGE: DASHBOARD
+  ============================================= -->
+  <section class="page" id="page-dashboard">
+    <div class="dashboard-header">
+      <div class="dash-avatar" id="dashAvatar">🙂</div>
+      <div>
+        <h2 id="dashName">Your Name</h2>
+        <p id="dashBio" class="dash-bio">Your bio will show here.</p>
+        <div class="dash-rating">
+          <span class="stars" id="dashStars">★★★★★</span>
+          <span id="dashRatingNum">(0.0)</span>
+        </div>
+        <!-- Email Authentication Status Indicator -->
+        <div class="dash-email-status-pill" id="dashEmailStatusContainer">
+          <span class="email-status-tag" id="dashEmailBadge">Checking email status...</span>
+          <button type="button" class="btn-email-action" id="btnResendVerification" title="Send email verification link">Send Verification Link</button>
+          <button type="button" class="btn-email-action" id="btnCheckVerification" title="Check if verified">Check Status</button>
+        </div>
+      </div>
+      <button class="btn btn-ghost" id="dashEditProfileBtn">Edit profile</button>
+    </div>
+
+    <div class="dash-stats-grid">
+      <div class="dash-stat-card teach-card">
+        <span class="dash-stat-icon">📚</span>
+        <span class="dash-stat-num" id="dashTeachCount">0</span>
+        <span class="dash-stat-label">Skills Taught</span>
+      </div>
+      <div class="dash-stat-card learn-card">
+        <span class="dash-stat-icon">🎓</span>
+        <span class="dash-stat-num" id="dashLearnCount">0</span>
+        <span class="dash-stat-label">Skills Learned</span>
+      </div>
+      <div class="dash-stat-card hours-card">
+        <span class="dash-stat-icon">⏱️</span>
+        <span class="dash-stat-num" id="dashHours">0</span>
+        <span class="dash-stat-label">Hours Taught</span>
+      </div>
+      <div class="dash-stat-card rating-card">
+        <span class="dash-stat-icon">⭐</span>
+        <span class="dash-stat-num" id="dashRatingCard">0.0</span>
+        <span class="dash-stat-label">Average Rating</span>
+      </div>
+    </div>
+
+    <div class="dash-columns">
+      <div class="dash-col">
+        <h3>Skills I Teach</h3>
+        <div id="dashTeachList" class="dash-skill-list"></div>
+      </div>
+      <div class="dash-col">
+        <h3>Skills I'm Learning</h3>
+        <div id="dashLearnList" class="dash-skill-list"></div>
+      </div>
+    </div>
+
+    <div class="dash-history">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:0.5rem;">
+        <h3>📹 Video Call & Session History</h3>
+        <span id="callHistoryCount" style="font-size:0.85rem; color:var(--text-muted-dark); font-weight:600;">0 sessions</span>
+      </div>
+      <div id="historyList" class="history-list"></div>
+    </div>
+  </section>
+
+
+  <!-- ============================================
+       VIDEO CALL MODAL (real WebRTC now)
+  ============================================= -->
+  <div class="modal-overlay hidden" id="videoModal">
+    <div class="video-modal">
+      <div class="video-modal-header">
+        <span id="videoCallTitle">Video call with...</span>
+        <span class="call-timer" id="callTimer">00:00</span>
+      </div>
+
+      <div class="video-screens">
+        <!-- Remote person's real video stream renders into this <video> tag -->
+        <div class="video-screen video-screen-them">
+          <video id="remoteVideo" autoplay playsinline class="video-el"></video>
+          <div class="video-avatar-fallback" id="remoteFallback">🙂</div>
+          <span class="video-tag" id="videoTheirName">Connecting...</span>
+        </div>
+
+        <!-- Your own camera preview renders into this <video> tag -->
+        <div class="video-screen video-screen-me">
+          <video id="localVideo" autoplay playsinline muted class="video-el"></video>
+          <span class="video-tag video-tag-me">You</span>
+        </div>
+      </div>
+
+      <div class="video-controls">
+        <button class="call-btn" id="muteBtn" title="Mute">🎤</button>
+        <button class="call-btn" id="camBtn" title="Camera">📷</button>
+        <button class="call-btn call-btn-end" id="endCallBtn" title="End call">📞</button>
+      </div>
+
+      <p class="video-hint" id="videoStatus">Requesting camera access...</p>
+    </div>
+  </div>
+
+
+  <!-- ============================================
+       "SESSION ENDED" RATING MODAL
+  ============================================= -->
+  <div class="modal-overlay hidden" id="ratingModal">
+    <div class="rating-modal">
+      <h3>How was your session?</h3>
+      <p id="ratingWith">Rate your swap with...</p>
+
+      <div class="star-picker" id="starPicker">
+        <span data-val="1">★</span>
+        <span data-val="2">★</span>
+        <span data-val="3">★</span>
+        <span data-val="4">★</span>
+        <span data-val="5">★</span>
+      </div>
+
+      <label for="hoursInput">How many hours was the session?</label>
+      <input type="number" id="hoursInput" min="0.5" max="8" step="0.5" value="1" />
+
+      <button class="btn btn-primary btn-full" id="submitRatingBtn">Submit & finish</button>
+      <button class="btn btn-ghost btn-full" id="skipRatingBtn" style="margin-top: 0.6rem;">Skip for now</button>
+    </div>
+  </div>
+
+
+  <!-- Incoming call popup — shows when someone starts a call with you -->
+  <div class="modal-overlay hidden" id="incomingCallModal">
+    <div class="rating-modal incoming-modal-card">
+      <div class="incoming-call-avatar" id="incomingCallAvatar">📹</div>
+      <h3 id="incomingCallText">Incoming video call...</h3>
+      <p id="incomingCallSub">Someone is ready to start your swap session.</p>
+      <div class="incoming-call-actions">
+        <button class="btn btn-primary btn-full" id="acceptCallBtn">Answer 📹</button>
+        <button class="btn btn-ghost btn-full" id="declineCallBtn">Decline</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       EDIT PROFILE MODAL
+  ============================================= -->
+  <div class="modal-overlay hidden" id="editProfileModal">
+    <div class="edit-modal-card">
+      <div class="edit-modal-header">
+        <h3>Edit Your Profile</h3>
+        <button class="close-modal-btn" id="closeEditModalBtn" type="button" aria-label="Close">&times;</button>
+      </div>
+
+      <form id="editProfileForm">
+        <div class="form-row">
+          <label for="editName">Your Name</label>
+          <input type="text" id="editName" placeholder="e.g. Aditi Sharma" required />
+        </div>
+
+        <div class="form-row">
+          <label>Avatar Emoji</label>
+          <div class="avatar-picker" id="editAvatarPicker"></div>
+          <input type="hidden" id="editAvatar" value="🙂" />
+        </div>
+
+        <div class="form-row">
+          <label for="editBio">Short Bio</label>
+          <textarea id="editBio" placeholder="Tell others what you swap..." rows="3"></textarea>
+        </div>
+
+        <div class="split-row">
+          <div class="form-row half">
+            <label for="editTeach">Skill you TEACH</label>
+            <input type="text" id="editTeach" placeholder="e.g. Photography" required />
+          </div>
+          <div class="form-row half">
+            <label for="editLearn">Skill you want to LEARN</label>
+            <input type="text" id="editLearn" placeholder="e.g. French" required />
+          </div>
+        </div>
+
+        <p class="form-note" id="editProfileNote"></p>
+
+        <div class="edit-actions">
+          <button type="submit" class="btn btn-primary btn-full" id="saveProfileBtn">Save changes</button>
+          <button type="button" class="btn btn-ghost" id="cancelEditModalBtn">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast hidden" id="toast"></div>
+
+  <!-- Firebase SDKs, loaded as ES Modules directly from Google's CDN.
+       type="module" lets us use "import" statements in our own script.js -->
+  <script src="firebase-config.js" type="module"></script>
+  <script src="script.js" type="module"></script>
+</body>
+</html>
